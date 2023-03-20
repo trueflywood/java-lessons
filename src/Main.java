@@ -3,198 +3,131 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int x;
-        boolean result;
-        int resultInt;
-
-        System.out.println("определение положительного числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        result = IsPositiv(x);
-        if (result) {
-            System.out.println("Число положительное");
-        } else  {
-            System.out.println("Число отрицательное");
-        }
-        System.out.println();
-
-        System.out.println("определение орицательного числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        result = IsNeqativ(x);
-        if (result) {
-            System.out.println("Число отрицательное");
-        } else {
-            System.out.println("Число положительное");
-        }
-        System.out.println();
-
-        System.out.println("определение числа на равестро 0");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        result = IsZero(x);
-        if (result) {
-            System.out.println("Число равно 0");
-        } else {
-            System.out.println("Число не равно 0");
-        }
-        System.out.println();
-
-
-        System.out.println("определение четного числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        result = IsEven(x);
-        if (result) {
-            System.out.println("Число четное");
-        } else {
-            System.out.println("Число не четное");
-        }
-        System.out.println();
-
-
-        System.out.println("определение не четного числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        result = IsOdd(x);
-        if (result) {
-            System.out.println("Число не четное");
-        } else {
-            System.out.println("Число четное");
-        }
-        System.out.println();
-
-
-        System.out.println("определение квадрата числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        resultInt = squaring(x);
-        System.out.println("квадрат числа = " + resultInt);
-        System.out.println();
-
-
-        System.out.println("определение куба числа");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        resultInt = cubing(x);
-        System.out.println("куб числа = " + resultInt);
-        System.out.println();
-
-
-
-        System.out.println("возведение числа в степень");
-        System.out.print("введите число:");
-        x = scanner.nextInt();
-        int degree;
-        System.out.print("введите степень больше 1:");
-        degree = scanner.nextInt();
-        resultInt = pow(x, degree);
-        System.out.println("число " + x + " в степени " + degree + " = " + resultInt);
-        System.out.println();
-
-
 
         System.out.println("Суммирование чисел");
         System.out.print("введите первое слогаемое:");
-        x = scanner.nextInt();
-        int y;
+        int x = scanner.nextInt();
         System.out.print("введите второе слогаемое:");
-        y = scanner.nextInt();
-        resultInt = summa(x, y);
-        if (x != resultInt) System.out.println("Сумма " + x + " + " + y + " = " + resultInt);
+        int y = scanner.nextInt();
+        System.out.println("Сумма " + x + " + " + y + " = " + summa(x, y));
         System.out.println();
 
 
-    }
+        System.out.println("Деление чисел");
+        System.out.print("введите делимое:");
+        int x1 = scanner.nextInt();
+        System.out.print("введите делитель:");
+        int y1 = scanner.nextInt();
+        if (y1 != 0) {
+            float resultInt1 = delenie(x1, y1);
+            System.out.printf("Результат %d / %d = %.2f",  x1,  y1, resultInt1);
+            System.out.println();
+        } else {
+            System.out.println("Деление на ноль запрещено");
+        }
+        System.out.println();
 
 
-    /**
-     * Определение положительного числа
-     * @param x число
-     * @return boolean
-     */
-    public static boolean IsPositiv(int x) {
-        return x >= 0 ? true : false;
-    }
-    /**
-     * Определение отрицательного числа
-     * @param x число
-     * @return boolean
-     */
-    public static boolean IsNeqativ(int x) {
-        return  !IsPositiv(x);
-    }
-    /**
-     * Определение ноля
-     * @param x число
-     * @return boolean
-     */
-    public static boolean IsZero(int x) {
-        return x == 0 ? true : false;
-    }
+        System.out.println("Произведение чисел");
+        System.out.print("введите первый множитель:");
+        int x2 = scanner.nextInt();
+        System.out.print("введите второй множитель:");
+        int y2 = scanner.nextInt();
+        System.out.println("Произведение " + x2 + " * " + y2 + " = " + proizvedneie(x2, y2));
+        System.out.println();
 
-    /**
-     * Определение четного числа
-     * @param x число
-     * @return boolean
-     */
-    public static boolean IsEven(int x) {
-        return x % 2 == 0 ? true : false;
-    }
 
-    /**
-     * Определение отрицательного числа
-     * @param x число
-     * @return boolean
-     */
-    public static boolean IsOdd(int x) {
-        return !IsEven(x);
-    }
+        System.out.println("Разность чисел");
+        System.out.print("введите уменьшаемое:");
+        int x3 = scanner.nextInt();
+        System.out.print("введите вычитаемое:");
+        int y3 = scanner.nextInt();
+        System.out.println("Разность " + x3 + " - " + y3 + " = " + raznost(x3, y3));
+        System.out.println();
 
-    /**
-     * возведение числа в квадрат
-     * @param x число
-     * @return int
-     */
-    public static int squaring(int x) {
-        return x * x;
-    }
+        // массив
+        System.out.println("Заполняем массив");
+        int[] arr = new int[5];
 
-    /**
-     * возведение числа в куб
-     * @param x число
-     * @return int
-     */
-    public static int cubing(int x) {
-        return squaring(x) * x;
-    }
+        for (int i = 0; i < 5; i++) {
+            System.out.print("введите элемент массива № " + (i+1) + ":");
+            int arrItem = scanner.nextInt();
+            arr[i] = arrItem;
+            System.out.println();
+        }
 
-    /**
-     * Возведение числа в степень
-     * @param x число
-     * @param degree степень
-     * @return значение
-     */
-    public static int pow(int x, int degree) {
-        int y = x;
-        if (degree <= 1 ) {
-            System.out.println("Степень должна быть больше 1");
-        }else {
-            for (int i = 1; i < degree; i++) {
-                y*=x;
+        System.out.println("печатаем массив");
+        Print(arr);
+        System.out.println();
+        System.out.println("вычисляем максимум");
+        int maxElement = arr[0];
+        for (int element: arr) {
+            if (max(maxElement, element) == -1) {
+                maxElement = element;
             }
         }
-        return y;
+        System.out.println("Максимальное значение: " + maxElement);
+
+
+        System.out.println("вычисляем минимум");
+        int minElement = arr[0];
+        for (int element: arr) {
+            if (min(minElement, element) == -1) {
+                minElement = element;
+            }
+        }
+        System.out.println("Минимальное значение: " + minElement);
+
+        System.out.println("вычисляем среднее");
+        System.out.printf("Среднее значение: %.2f", average(arr));
+
     }
 
-    /**
-     * Сумма двух чисел
-     * @param a слогаемое
-     * @param b слогаемое
-     * @return сумма
-     */
     public static int summa(int a, int b) {
         return a + b;
     }
 
+    public static float delenie(int a, int b) {
+        return (float) a / b;
+    }
+
+    public static int proizvedneie(int a, int b) {
+        return a * b;
+    }
+
+    public static int raznost(int a, int b) {
+        return a - b;
+    }
+
+    public static int max(int a, int b) {
+        if (a > b) return 1;
+        if (b > a) return -1;
+        return 0;
+    }
+
+    public static  int min(int a, int b) {
+        return max(b, a);
+    }
+
+    public static float average(int[] arr) {
+        float average = 0f;
+        if (arr.length > 0) {
+            int summ = 0;
+            for (int num: arr) {
+                summ += num;
+            }
+            average = (float) summ / arr.length;
+        }
+        return average;
+    }
+    
+    public static void Print(int[] arr){
+        System.out.print('[');
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i != arr.length-1) System.out.print(",");
+        }
+        System.out.print(']');
+    }
 }
