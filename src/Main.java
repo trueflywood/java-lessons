@@ -16,26 +16,44 @@ public class Main {
         arr.add(5);
         arr.print();
         System.out.println();
+
         System.out.println("Удаляем элемент с 3 индексом");
         arr.removeByIndex(3);
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
-        System.out.println("Добавляем значения по индексу");
-        System.out.println("значение 5 по индексу 3 ");
+
+        System.out.println("Добавляем значения по индексу: ");
+        System.out.println(" - значение 5 по индексу 3 ");
         arr.insertByIndex(3,5);
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
-        System.out.println("значение 56 по индексу 7 ");
+
+        System.out.println(" - значение 56 по индексу 7 ");
         arr.insertByIndex(7,56);
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
-        System.out.println("значение 22 по индексу 9 ");
+
+        System.out.println("- значение 22 по индексу 9 ");
         arr.insertByIndex(9,22);
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
+        System.out.println();
+
+        System.out.println("Вставляем значение 34 в начало ");
+        arr.addStart(34);
+        arr.print();
+        System.out.println("новый размер массива = " + arr.lenght());
+        System.out.println();
+
+        System.out.println("Вставляем значение 18 в конец ");
+        arr.addEnd(18);
+        arr.print();
+        System.out.println("новый размер массива = " + arr.lenght());
+        System.out.println();
+
     }
 }
 
@@ -75,7 +93,7 @@ class MyArray {
             System.out.print(this.arr[i]);
             if (i != this.lenght()-1) System.out.print(",");
         }
-        System.out.print(']');
+        System.out.println(']');
     }
 
     private void resizeArray() {
@@ -120,5 +138,12 @@ class MyArray {
             this.index++;
             this.arr = newArr;
         }
+    }
+
+    public void addEnd(int value) {
+        this.add(value); // Добавление в конец - тоже самое что и простое добавление
+    }
+    public void addStart(int value) {
+        this.insertByIndex(0, value); // Добавление в начало - тоже что и встака нового значения в нулевой индекс.
     }
 }
