@@ -31,7 +31,7 @@ public class Main {
         int resultIndex = 0;
 
         do {
-            // проверка на окончание одного из маммивов
+            // проверка на окончание одного из массивов
             if(index1 >= arr1.length) {
                 result[resultIndex++] = arr2[index2++];
                 continue;
