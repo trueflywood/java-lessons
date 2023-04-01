@@ -33,23 +33,19 @@ public class Main {
         do {
             // проверка на окончание одного из маммивов
             if(index1 >= arr1.length) {
-                result[resultIndex++] = arr2[index2];
-                index2++;
+                result[resultIndex++] = arr2[index2++];
                 continue;
             }
             if(index2 >= arr2.length) {
-                result[resultIndex++] = arr1[index1];
-                index1++;
+                result[resultIndex++] = arr1[index1++];
                 continue;
             }
 
             // проверка промежуточных состояний
             if(arr1[index1] <= arr2[index2] ) {
-                result[resultIndex++] = arr1[index1];
-                index1++;
+                result[resultIndex++] = arr1[index1++];
             } else {
-                result[resultIndex++] = arr2[index2];
-                index2++;
+                result[resultIndex++] = arr2[index2++];
             }
 
         } while(resultIndex < result.length );
