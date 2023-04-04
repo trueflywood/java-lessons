@@ -75,31 +75,25 @@ class MyArray {
     }
     public  void print(){
         System.out.print('[');
-
-//        for (int i = 0; i < this.lenght(); i++) {
-//            System.out.print(this.arr[i]);
-//            if (i != this.lenght()-1) System.out.print(",");
-//        }
         int i = 0;
-        while (i < this.lenght()) {
+
+        do {
+            if(this.lenght() == 0) break;
             System.out.print(this.arr[i]);
             if (i != this.lenght()-1) System.out.print(",");
-            i++;
-        }
+        } while (++i < this.lenght());
         System.out.print(']');
     }
 
     private void regeneration() {
         int[] newArr = new int[this.size * 2];
 
-//        for (int i = 0; i < this.size; i++) {
-//            newArr[i] = this.arr[i];
-//        }
         int i = 0;
-        while(i < this.size) {
+
+        do {
+            if(this.lenght() == 0) break;
             newArr[i] = this.arr[i];
-            i++;
-        }
+        } while (++i < this.lenght());
         this.size *= 2;
         this.arr = newArr;
     }
@@ -108,23 +102,17 @@ class MyArray {
         if (index < this.index && index >= 0) {
             int[] newArr = new int[this.size];
 
-//            for (int i = 0; i < this.index; i++) {
-//                if (index > i) {
-//                    newArr[i] = arr[i];
-//                } else if (index < i) {
-//                    newArr[i-1] = arr[i];
-//                }
-//            }
 
             int i = 0;
-            while (i < this.index) {
+
+            do {
+                if(this.lenght() == 0) break;
                 if (index > i) {
                     newArr[i] = arr[i];
                 } else if (index < i) {
                     newArr[i-1] = arr[i];
                 }
-                i++;
-            }
+            } while (++i < this.lenght());
             this.index = this.index - 1;
             this.arr = newArr;
         }
@@ -139,23 +127,16 @@ class MyArray {
             int[] newArr = new int[this.size];
             newArr[index] = value;
 
-//            for (int i = 0; i < this.index; i++) {
-//                if (index > i) {
-//                    newArr[i] = arr[i];
-//                } else if (index <= i) {
-//                    newArr[i+1] = arr[i];
-//                }
-//            }
-
             int i = 0;
-            while (i < this.index) {
+
+            do {
+                if(this.lenght() == 0) break;
                 if (index > i) {
                     newArr[i] = arr[i];
                 } else if (index <= i) {
                     newArr[i+1] = arr[i];
                 }
-                i++;
-            }
+            } while (++i < this.lenght());
 
             this.index++;
             this.arr = newArr;
