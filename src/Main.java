@@ -103,11 +103,10 @@ class MyString {
     }
 
 
-    boolean startsWith(String str){//3
-//"Farid" arr
-//"FaridAbdull" str
+    boolean startsWith(String str){
 
-        if (str.length()>arr.length){//10
+
+        if (str.length()>arr.length){
             return false;
         }
 
@@ -121,8 +120,7 @@ class MyString {
 
 
 
-     // TODO
-    //str.replace('a','z');
+
     String replace(char oldChar, char newChar) {
         char[] newArr = new char[arr.length];
         for (int i = 0; i < arr.length; i++) {
@@ -131,9 +129,9 @@ class MyString {
         return new String(newArr);
     }
 
-    //str.startsWith()
 
-    //str.reverse()
+
+
 
     String reverse() {
         char[] newArr = new char[arr.length];
@@ -174,6 +172,52 @@ class MyString {
         }
         return str;
     }
+
+
+    boolean endsWith(String str) {
+        if (str.length()>arr.length){
+            return false;
+        }
+
+        for (int i = (arr.length - str.length()); i < arr.length; i++) {
+            if (arr[i] != str.charAt(i + str.length() - arr.length)){
+                return false;
+            }
+        }
+        return true;
+    }
+    char charAt(int index) {
+        if (index > arr.length - 1 || index < 0) return 0;
+        return arr[index];
+    }
+
+    boolean contains(String str) {
+        if (str.length()>arr.length){
+            return false;
+        }
+
+
+        for (int i = 0; i <= arr.length - str.length(); i++) {
+            if (arr[i] == str.charAt(0)) {
+                int start = i;
+                int end = start + str.length();
+                for (int j = start; j < end; j++) {
+                    int index = j - start;
+                    if (str.charAt(index) == arr[j]) {
+                        if (j == (end - 1)) return true;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    boolean equals(String str) {
+        return str.length() == arr.length && this.contains(str);
+    }
+
 }
 
 
@@ -184,10 +228,14 @@ public class Main {
 
 
 
-        System.out.println("reverse : |" + myString.replace(' ', '_') + "|");
+        System.out.println("replace(' ', '_') : |" + myString.replace(' ', '_') + "|");
         System.out.println("reverse : |" + myString.reverse() + "|");
-        System.out.println("trimL( : |" + myString.trimL() +"|");
+        System.out.println("trimL : |" + myString.trimL() +"|");
         System.out.println("trimR : |" + myString.trimR() + "|");
-
+        System.out.println("startsWith(\"  s\") : " + myString.startsWith("  s"));
+        System.out.println("endsWith(\"id   f        \") : " + myString.endsWith("id   f        "));
+        System.out.println("charAt(4) : " + myString.charAt(4));
+        System.out.println("contains(\" Farid\") : " + myString.contains(" Farid"));
+        System.out.println("equals(\"  s Farid   f        \") : " + myString.equals("  s Farid   f        "));
     }
 }
