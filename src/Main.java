@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        int[] arr = new int[]{-2,-5,-8,-15,-15,3,4,4,3,5,3,4,7,8,7,9,3,5,67,45,78,23};
+        int[] arr = new int[]{-2,-5,-9,-15,-15,3,4,4,3,5,3,4,-1,7,8,7,9,3,5,67,45,78,23};
         int[] arr2 = new int[]{-5,-15,-15,3,3,5,3,7,7,9,3,5,67,45,23};
         System.out.println("исходный массив");
         System.out.println(Arrays.toString(arr));
@@ -17,29 +17,98 @@ public class Main {
         System.out.println("Max index: " + subZeroSumm(arr) );
         System.out.println("5)Найдите наименьший четный элемент массива. Если такого нет, то выведите первый элемент.");
         System.out.println("Min even: " + minEven(arr) );
-        System.out.println("Min even: " + minEven(arr2) );
+        System.out.println("Min even: " + minEven(arr2) + " (Если удалить из массива все четные)");
         System.out.println("6)Прописать метод который сортирует массив");
         System.out.println("sort: " + Arrays.toString(sort(arr)) );
         System.out.println("7)Выводит все элементы массива через 1.");
         System.out.println("evenElement: " + Arrays.toString(evenElement(arr)) );
         System.out.println("8)Выводит все элементы массива пока не встретится элемент -1");
-//        System.out.println("sort: " + Arrays.toString(sort(arr)) );
-        System.out.println("9)Заменить элeменты в массиве отрицательные на положительные и наоборот пример 1 => --1");
-//        System.out.println("sort: " + Arrays.toString(sort(arr)) );
+        System.out.println("subArray: " + Arrays.toString(subArray(arr)) );
+        System.out.println("9)Заменить элeменты в массиве отрицательные на положительные и наоборот пример 1 => -1");
+        System.out.println("signRevert: " + Arrays.toString(signRevert(arr)) );
         System.out.println("10)Найти количество:\n" +
                 "а) четных\n" +
+                "   getEven: " + getEven(arr) + "\n" +
                 "б) нечетных\n" +
+                "   getOdd: " + getOdd(arr) + "\n" +
                 "в) положительных\n" +
+                "   getPositive: " + getPositive(arr) + "\n" +
                 "г) отрицательных\n" +
+                "   getNegative: " + getNegative(arr) + "\n" +
                 "д) двухзначных\n" +
-                "е) однозначных");
+                "   getTwoSign: " + getTwoSign(arr) + "\n" +
+                "е) однозначных\n" +
+                "   getOneSign: " + getOneSign(arr) + "\n"
+        );
 //        System.out.println("sort: " + Arrays.toString(sort(arr)) );
 
     }
 
-//    public static int[] subArray(int[] arr) {
-//        int[] newArr
-//    }
+    public static int getTwoSign(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if ((arr[i] >= 10 && arr[i] <= 99) || (arr[i] <= -10 && arr[i] >= -99)) count++;
+        }
+        return count;
+    }
+    public static int getOneSign(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= -9 && arr[i] <= 9) count++;
+        }
+        return count;
+    }
+    public static int getPositive(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= 0) count++;
+        }
+        return count;
+    }
+    public static int getNegative(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < 0) count++;
+        }
+        return count;
+    }
+
+    public static int getOdd(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 == 1 || arr[i] % 2 == -1) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static int getEven(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 == 0) count++;
+        }
+        return count;
+    }
+    public static int[] signRevert(int[] arr) {
+        int[] newArr = Arrays.copyOf(arr, arr.length);
+        for (int i = 0; i < newArr.length; i++) {
+            newArr[i] *= -1;
+        }
+        return newArr;
+    }
+
+    public static int[] subArray(int[] arr) {
+        ;
+        int index = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == -1) {
+                index = i;
+                break;
+            }
+        }
+        int[] newArr = Arrays.copyOf(arr, index);
+        return newArr;
+    }
 
     public static int[] evenElement(int[] arr) {
         int lenght = arr.length % 2 == 0 ? arr.length / 2 : arr.length / 2 + 1;
@@ -113,9 +182,9 @@ public class Main {
 
         for (int i = 0; i < arr.length; i++) {
             if(max == 0) {
-                if (arr[i] % 2 == 1) max = arr[i];
+                if (arr[i] % 2 == 1 || arr[i] % 2 == -1) max = arr[i];
             } else {
-                if (max < arr[i] && arr[i] % 2 == 1  ) max = arr[i];
+                if (max < arr[i] && (arr[i] % 2 == 1 || arr[i] % 2 == -1)) max = arr[i];
             }
         }
         return max;
