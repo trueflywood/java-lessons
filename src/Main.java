@@ -16,24 +16,43 @@ public class Main {
         arr.add(5);
         arr.print();
         System.out.println();
+
         System.out.println("Удаляем элемент с 3 индексом");
-        arr.removeByIndex(3);
+
+        try {
+            arr.removeByIndex(3);
+        } catch (ArrayException e) {
+            System.out.println(e.getMessage());
+        }
+
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
         System.out.println("Добавляем значения по индексу");
         System.out.println("значение 5 по индексу 3 ");
-        arr.insertByIndex(3,5);
+        try {
+            arr.insertByIndex(3,5);
+        } catch (ArrayException e) {
+            System.out.println(e.getMessage());
+        }
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
         System.out.println("значение 56 по индексу 7 ");
-        arr.insertByIndex(7,56);
+        try {
+            arr.insertByIndex(7,56);
+        } catch (ArrayException e) {
+            System.out.println(e.getMessage());
+        }
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
         System.out.println();
         System.out.println("значение 22 по индексу 9 ");
-        arr.insertByIndex(9,22);
+        try {
+            arr.insertByIndex(9,22);
+        } catch (ArrayException e) {
+            System.out.println(e.getMessage());
+        }
         arr.print();
         System.out.println("новый размер массива = " + arr.lenght());
     }
@@ -87,7 +106,7 @@ class MyArray {
         this.arr = newArr;
     }
 
-    public void removeByIndex(int index) {
+    public void removeByIndex(int index) throws ArrayException {
         if (index < this.index && index >= 0) {
             int[] newArr = new int[this.size];
             for (int i = 0; i < this.index; i++) {
@@ -99,10 +118,13 @@ class MyArray {
             }
             this.index = this.index- 1;
             this.arr = newArr;
+        } else {
+            throw new ArrayException("индекс не попадает в диапазон");
         }
+
     }
 
-    public void insertByIndex(int index, int value) {
+    public void insertByIndex(int index, int value) throws ArrayException {
         if (this.index == this.size) {
             this.resizeArray();
         }
@@ -119,6 +141,27 @@ class MyArray {
             }
             this.index++;
             this.arr = newArr;
+        } else {
+          throw new ArrayException("индекс не попадает в диапазон");
         }
+        // TODO
+
+    }
+}
+
+class ArrayException extends Exception {
+
+    private String message = "";
+
+    public ArrayException() {
+        super();
+    }
+
+    public ArrayException(String message) {
+        this.message = message;
+    }
+    @Override
+    public String getMessage() {
+        return "Custom ArrayException: " + message;
     }
 }
