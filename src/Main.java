@@ -21,7 +21,7 @@ public class Main {
         phone3.receiveCall("Женя", "+74578700588");
 
         System.out.println("\nОтправка сообщений по номерам: ");
-        phone.sendMessage("+74526700588", "+74556700588", "+74578700588");
+        phone.sendMessage("Приходите в гости","+74526700588", "+74556700588", "+74578700588");
 
     }
 }
@@ -58,10 +58,10 @@ class Phone {
     public void receiveCall(String name, String phone) {
         System.out.println("Звонит " + name + " (" + phone + ") ");
     }
-    public void sendMessage(String ...numbers) {
+    public void sendMessage(String message, String ...numbers) {
         for (String number :
                 numbers) {
-            System.out.println(number);
+            System.out.println("Сообщение \"" + message + "\" было отправлено на " + number);
         }
     }
 
