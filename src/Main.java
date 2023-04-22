@@ -22,7 +22,6 @@ public class Main {
 
         System.out.println("\nОтправка сообщений по номерам: ");
         phone.sendMessage("Приходите в гости","+74526700588", "+74556700588", "+74578700588");
-
     }
 }
 class Phone {
