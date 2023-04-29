@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.IntToDoubleFunction;
@@ -59,7 +60,6 @@ public class PhoneBook {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Contact>>(){}.getType();
         this.book = gson.fromJson(jsonData, listType);
-        System.out.println(this.book.toArray()[0]);
         showMainMenu();
     }
 
@@ -151,11 +151,46 @@ public class PhoneBook {
                 System.out.print("Выберите id записи:  " );
                 Integer id = scanner.nextInt();
                 int index = this.idToIndex(id);
+                Contact oldContact = book.get(index);
 
-                // TODO
 
-                if (this.confirm()) {
-                    book.remove(index);
+
+
+
+                System.out.print("\nВведите новое имя(" + oldContact.getName() + "): ");
+                String name = scanner.next();
+                if(name.equals("")) name = oldContact.getName();
+
+                System.out.print("\nВведите новую фамилию(" + oldContact.getSurname() + "): ");
+                String surname = scanner.next();
+                if(surname.equals("")) surname = oldContact.getSurname();
+
+                System.out.print("\nВведите номер(" + oldContact.getNumber() + "): ");
+                String number = scanner.next();
+                if(number.equals("")) number = oldContact.getNumber();
+
+                Integer age;
+                do {
+                    Scanner scanner2 = new Scanner(System.in);
+                    try {
+                        System.out.print("\nВведите возраст(" + oldContact.getAge() + "):");
+                         age = scanner2.nextInt();
+                        if (age < 1 || age > 120) {
+                            throw new Exception("Не правильный возраст");
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Возраст не правильный");
+                    }
+
+                } while (true);
+
+                Contact contact = new Contact(oldContact.getId(), name,surname,number,age);
+
+                if (this.confirm("Сохранить?")) {
+
+                    this.book.remove(index);
+                    this.book.add(index, contact);
                 }
                 this.ShowAllContacts();
                 break;
@@ -171,8 +206,10 @@ public class PhoneBook {
      */
     private void RemoveAllContacts() {
         // TODO добавить подтверждение
-        book = new ArrayList<>();
-        System.out.println("Список очищен");
+        if(this.confirm()) {
+            book = new ArrayList<>();
+            System.out.println("Список очищен");
+        }
     }
 
     private int idToIndex(int id) throws Exception {
@@ -215,11 +252,15 @@ public class PhoneBook {
      * @return
      */
     private boolean confirm() {
+        return confirm("Вы уверены?");
+    }
+
+    private boolean confirm(String text  ) {
         Boolean answer = false;
         do {
             Scanner scanner = new Scanner(System.in);
             try {
-                System.out.print("Вы уверены? (y/n)");
+                System.out.print(text + " (y/n)");
                 String answerStr  = scanner.next();
                 switch (answerStr) {
                     case "y" -> {

@@ -54,10 +54,11 @@ public class Contact {
         this.age = contact.age;
     }
 
-    Contact (Integer id, String name, String surname, Integer age) {
+    Contact (Integer id, String name, String surname,String number, Integer age) {
         this.id = id;
         this.name = name;
         this.surname = surname;
+        this.number = number;
         this.age = age;
     }
 
