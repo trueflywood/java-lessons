@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.IntToDoubleFunction;
+import java.util.stream.Collectors;
 
 
 /**
@@ -137,13 +138,31 @@ public class PhoneBook {
     }
 
     private void SearchContacts() {
-        System.out.println("SearchContacts");
+//        System.out.println("SearchContacts");
+//
+        do {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("введите строку для поиска:  " );
+            String searchStr = scanner.next();
+
+            List<Contact> filtered = this.book.stream().filter(item -> item.getName().toLowerCase().contains(searchStr.toLowerCase()) || item.getSurname().toLowerCase().contains(searchStr.toLowerCase()) || item.getNumber().toLowerCase().contains(searchStr.toLowerCase())).toList();
+
+            this.PrintHeader("Контакты");
+            for (Contact contact:
+                    filtered) {
+                System.out.println(contact);
+            }
+            this.PrintFooter();
+            break;
+
+        } while (true);
+
     }
 
     /**
      * изменение записи
      */
-    private void EditContact() { // TODO
+    private void EditContact() {
 
         do {
             Scanner scanner = new Scanner(System.in);
@@ -205,7 +224,6 @@ public class PhoneBook {
      * Очистка списка
      */
     private void RemoveAllContacts() {
-        // TODO добавить подтверждение
         if(this.confirm()) {
             book = new ArrayList<>();
             System.out.println("Список очищен");
