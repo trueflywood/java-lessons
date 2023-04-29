@@ -1,6 +1,18 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.function.IntToDoubleFunction;
+
+
+/**
+ * коды меню
+ */
 enum ActionСodes {
     EXIT(0),
     ADD(1),
@@ -10,7 +22,9 @@ enum ActionСodes {
     REMOVE_ALL(5),
     EDIT(6),
     SEARCH(7),
-    SORT(8);
+    SORT(8),
+    SAVE(9);
+
     ActionСodes(int codeAction) {
         this.code = codeAction;
     }
@@ -39,8 +53,16 @@ public class PhoneBook {
     public PhoneBook(PhoneBook book) {
         this.book = new ArrayList<Contact>(book.getBook());
         showMainMenu();
-
     }
+
+    public PhoneBook(String jsonData) {
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<Contact>>(){}.getType();
+        this.book = gson.fromJson(jsonData, listType);
+        System.out.println(this.book.toArray()[0]);
+        showMainMenu();
+    }
+
 
 
     public ArrayList<Contact> getBook() {
@@ -59,13 +81,14 @@ public class PhoneBook {
             System.out.println("""
                         0 - Выход
                         1 - Добавить запись
-                        2 - Показать запись по счету
+                        2 - Показать запись по id
                         3 - Показать все записи
-                        4 - Удалить запись
+                        4 - Удалить запись по id
                         5 - Удалить все записи
                         6 - Изменить запись
                         7 - Найти записи
                         8 - Сортировать записи
+                        9 - Сохранить в фаил
                     """);
             try {
                 Scanner scanner = new Scanner(System.in);
@@ -84,6 +107,7 @@ public class PhoneBook {
                     case REMOVE_ALL -> this.RemoveAllContacts();
                     case EDIT -> this.EditContact();
                     case SEARCH -> this.SearchContacts();
+                    case SAVE -> this.saveToFile();
                     default -> System.out.println("Не правильный выбор");
                 }
 
@@ -94,24 +118,130 @@ public class PhoneBook {
         } while (true);
     }
 
+    private void saveToFile() {
+        String json = new Gson().toJson(this.book);
+        System.out.println(json);
+        try {
+            this.saveJsonBase(json);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+    }
+
+    private void saveJsonBase (String data) throws FileNotFoundException {
+        PrintWriter out = new PrintWriter("base.json");
+        out.write(data);
+        out.close();
+    }
+
     private void SearchContacts() {
         System.out.println("SearchContacts");
     }
 
-    private void EditContact() {
+    /**
+     * изменение записи
+     */
+    private void EditContact() { // TODO
+
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Выберите id записи:  " );
+                Integer id = scanner.nextInt();
+                int index = this.idToIndex(id);
+
+                // TODO
+
+                if (this.confirm()) {
+                    book.remove(index);
+                }
+                this.ShowAllContacts();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
 
     }
 
+    /**
+     * Очистка списка
+     */
     private void RemoveAllContacts() {
         // TODO добавить подтверждение
         book = new ArrayList<>();
         System.out.println("Список очищен");
     }
 
+    private int idToIndex(int id) throws Exception {
+        Boolean success = false;
+        int index = 0;
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getId() == id) {
+                index = i;
+                success = true;
+            }
+        }
+        if (!success) throw new Exception("не правильный ID записи");
+        return index;
+    }
+
+    /**
+     * удаление контакта по id
+     */
     private void RemoveContact() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Выберите id записи:  " );
+                Integer id = scanner.nextInt();
+                if (this.confirm()) {
+                    int index = this.idToIndex(id);
+                    book.remove(index);
+                }
+                this.ShowAllContacts();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
 
     }
 
+    /**
+     * Запрашиваем подтверждение
+     * @return
+     */
+    private boolean confirm() {
+        Boolean answer = false;
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Вы уверены? (y/n)");
+                String answerStr  = scanner.next();
+                switch (answerStr) {
+                    case "y" -> {
+                        answer = true;
+                    }
+                    case "n" -> {
+                        answer =  false;
+                    }
+                    default -> new Exception("нет такого варианта");
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+        return answer;
+    }
+
+    /**
+     * отображение всего списка контактов
+     */
     private void ShowAllContacts() {
         this.PrintHeader("Контакты");
         for (Contact contact:
@@ -121,37 +251,52 @@ public class PhoneBook {
         this.PrintFooter();
     }
 
+    /**
+     * отображение 1 контакта по ID
+     */
     private void ShowContact() {
-        Integer lenght = book.toArray().length ;
         do {
             Scanner scanner = new Scanner(System.in);
             try {
-                System.out.print("Выберите порядковый номер записи от 1 до " + (lenght));
-                Integer index = scanner.nextInt();
-                this.PrintHeader("Запись номер " + index);
-                System.out.println( book.toArray()[index - 1]);
+                System.out.print("Выберите id записи:  " );
+                Integer id = scanner.nextInt();
+                int index = this.idToIndex(id);
+                this.PrintHeader("Запись " + index);
+                System.out.println( book.toArray()[index]);
                 this.PrintFooter();
                 break;
             } catch (Exception e) {
-                System.out.println("неправильный выбор");
+                System.out.println(e.getMessage());
             }
         } while (true);
     }
+
+    /**
+     * Печать заголовка списка
+     *
+     * @param title заголовок
+     */
     private void PrintHeader(String title) {
         System.out.println();
         System.out.println();
         System.out.println(title);
         System.out.println("=========================================");
-        System.out.println("| Имя | фамилия | Телефон | Возраст |");
+        System.out.println("| ID | Имя | фамилия | Телефон | Возраст |");
         System.out.println("=========================================");
     }
 
+    /**
+     * Печать низа списка
+     */
     private void PrintFooter() {
         System.out.println("=========================================");
         System.out.println();
         System.out.println();
     }
 
+    /**
+     * Добавление контакта
+     */
     private void AddPhone() {
         System.out.println("AddPhone");
         Contact contact = new Contact();

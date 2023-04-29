@@ -3,6 +3,8 @@ public class Contact {
     private String surname;
     private String number;
     private int age;
+    private final int id;
+    static int nextId = 1;
 
     public String getName() {
         return name;
@@ -36,9 +38,33 @@ public class Contact {
         this.age = age;
     }
 
+    public  int getId() {
+        return id;
+    }
+
+    Contact() {
+        this.id = Contact.nextId++;
+    }
+
+    Contact(Contact contact) {
+        this();
+        this.name = contact.name;
+        this.surname = contact.surname;
+        this.number = contact.number;
+        this.age = contact.age;
+    }
+
+    Contact (Integer id, String name, String surname, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+    }
+
+
     @Override
     public String toString() {
-        return "| "+ this.name + " | " +this.surname + " | " +this.number + " | " +this.age + " |";
+        return "| "+ this.id + "| "+ this.name + " | " +this.surname + " | " +this.number + " | " +this.age + " |";
     }
 
 
