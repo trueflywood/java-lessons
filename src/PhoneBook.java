@@ -4,16 +4,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.IntToDoubleFunction;
 import java.util.stream.Collectors;
 
 
 /**
- * коды меню
+ * коды основного меню
  */
 enum ActionСodes {
     EXIT(0),
@@ -64,14 +61,8 @@ public class PhoneBook {
         showMainMenu();
     }
 
-
-
     public ArrayList<Contact> getBook() {
         return book;
-    }
-
-    public void setBook(ArrayList<Contact> book) {
-        this.book = book;
     }
 
     public void showMainMenu() {
@@ -108,6 +99,7 @@ public class PhoneBook {
                     case REMOVE_ALL -> this.RemoveAllContacts();
                     case EDIT -> this.EditContact();
                     case SEARCH -> this.SearchContacts();
+                    case SORT -> this.SortContacts();
                     case SAVE -> this.saveToFile();
                     default -> System.out.println("Не правильный выбор");
                 }
@@ -117,6 +109,106 @@ public class PhoneBook {
             }
 
         } while (true);
+    }
+
+    private void SortContacts() {
+
+        enum sortColunm  {
+            ID(0), NAME(1), SURNAME(2), PHONE(3);
+
+            sortColunm(int codeAction) {
+                this.code = codeAction;
+            }
+
+            public static sortColunm byOrdinal(int ord) throws Exception {
+                for (sortColunm m : sortColunm.values()) {
+                    if (m.code == ord) {
+                        return m;
+                    }
+                }
+                throw new Exception("Не правильный код выбора");
+            }
+            private final int code;
+        }
+
+        sortColunm selectCodeAction;
+        do {
+            System.out.println("Выберите действие:" );
+            System.out.println("""
+                        0 - ID
+                        1 - Имя
+                        2 - Фамилия
+                        3 - Номер телефона
+                    """);
+
+            try {
+                Scanner scanner = new Scanner(System.in);
+                Integer select = scanner.nextInt();
+                selectCodeAction = sortColunm.byOrdinal(select);
+
+                switch (selectCodeAction) {
+                    case ID -> this.SortID();
+                    case NAME -> this.SortName();
+                    case SURNAME -> this.SortSurname();
+                    case PHONE -> this.SortPhone();
+
+                    default -> System.out.println("Не правильный выбор");
+                }
+                break;
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        } while (true);
+
+
+    }
+
+    private void SortPhone() {
+        List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getNumber().compareToIgnoreCase(contact2.getNumber())).toList();
+        this.PrintHeader("Контакты (сортировка по номеру)");
+        for (Contact contact:
+                sortedBook) {
+            System.out.println(contact);
+        }
+        this.PrintFooter();
+    }
+
+    private void SortName() {
+        List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getName().compareToIgnoreCase(contact2.getName())).toList();
+        this.PrintHeader("Контакты (сортировка по Имени)");
+        for (Contact contact:
+                sortedBook) {
+            System.out.println(contact);
+        }
+        this.PrintFooter();
+
+    }
+
+    private void SortSurname() {
+        List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getSurname().compareToIgnoreCase(contact2.getSurname())).toList();
+        this.PrintHeader("Контакты (сортировка по Фамилии)");
+        for (Contact contact:
+                sortedBook) {
+            System.out.println(contact);
+        }
+        this.PrintFooter();
+
+    }
+
+    private void SortID() {
+
+
+
+        List<Contact> sortedBook = this.book.stream().sorted(Comparator.comparing(Contact::getId)).toList();
+        this.PrintHeader("Контакты (сортировка по ID)");
+        for (Contact contact:
+                sortedBook) {
+            System.out.println(contact);
+        }
+        this.PrintFooter();
+
     }
 
     private void saveToFile() {

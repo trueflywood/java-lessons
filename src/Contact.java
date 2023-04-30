@@ -3,8 +3,8 @@ public class Contact {
     private String surname;
     private String number;
     private int age;
-    private final int id;
-    static int nextId = 1;
+    private final Integer id;
+    static Integer nextId = 1;
 
     public String getName() {
         return name;
@@ -38,7 +38,7 @@ public class Contact {
         this.age = age;
     }
 
-    public  int getId() {
+    public  Integer getId() {
         return id;
     }
 
