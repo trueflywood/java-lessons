@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.IntToDoubleFunction;
-import java.util.stream.Collectors;
 
 
 /**
@@ -213,7 +211,6 @@ public class PhoneBook {
 
     private void saveToFile() {
         String json = new Gson().toJson(this.book);
-        System.out.println(json);
         try {
             this.saveJsonBase(json);
         } catch (Exception e) {
@@ -334,11 +331,123 @@ public class PhoneBook {
         if (!success) throw new Exception("не правильный ID записи");
         return index;
     }
+     private int nameToIndex(String name) throws Exception {
+        Boolean success = false;
+        int index = 0;
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getName().equalsIgnoreCase(name) ) {
+                index = i;
+                success = true;
+            }
+        }
+        if (!success) throw new Exception("запись с таким именем не найдена");
+        return index;
+    }
+    private int surnameToIndex(String surname) throws Exception {
+        Boolean success = false;
+        int index = 0;
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getSurname().equalsIgnoreCase(surname) ) {
+                index = i;
+                success = true;
+            }
+        }
+        if (!success) throw new Exception("запись с такой фамилией не найдена");
+        return index;
+    }
+    private int phoneToIndex(String phone) throws Exception {
+        Boolean success = false;
+        int index = 0;
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getNumber().equalsIgnoreCase(phone) ) {
+                index = i;
+                success = true;
+            }
+        }
+        if (!success) throw new Exception("запись с таким телефоном не найдена");
+        return index;
+    }
+
+
 
     /**
      * удаление контакта по id
      */
     private void RemoveContact() {
+        MenuRemoveContact menu = new MenuRemoveContact();
+        try {
+            MenuRemoveContact.ActionСodes code = menu.showMainMenu();
+            switch (code) {
+                case ID -> removeContactById();
+                case NAME -> removeContactByName();
+                case SURNAME -> removeContactBySurname();
+                case PHONE -> removeContactByPhone();
+            }
+        } catch (Exception e) {
+            System.out.println("Не правильный код выбора");
+        }
+
+
+    }
+
+    private void removeContactByPhone() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Введите телефон:  " );
+                String phone = scanner.nextLine();
+                if (this.confirm()) {
+                    int phoneIndex = this.phoneToIndex(phone);
+                    book.remove(phoneIndex);
+                }
+                this.ShowAllContacts();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+    }
+
+    private void removeContactBySurname() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Введите фамилию:  " );
+                String surname = scanner.nextLine();
+                if (this.confirm()) {
+                    int nameIndex = this.surnameToIndex(surname);
+                    book.remove(nameIndex);
+                }
+                this.ShowAllContacts();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+    }
+
+    private void removeContactByName() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Введите имя:  " );
+                String name = scanner.nextLine();
+                if (this.confirm()) {
+                    int nameIndex = this.nameToIndex(name);
+                    book.remove(nameIndex);
+                }
+                this.ShowAllContacts();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+    }
+
+    private void removeContactById() {
         do {
             Scanner scanner = new Scanner(System.in);
             try {
@@ -354,7 +463,6 @@ public class PhoneBook {
                 System.out.println(e.getMessage());
             }
         } while (true);
-
     }
 
     /**
@@ -486,4 +594,53 @@ public class PhoneBook {
     }
 
 
+}
+
+class MenuRemoveContact  {
+
+    enum ActionСodes {
+        ID(0, "по id" ),
+        NAME(1, "по имени"),
+        SURNAME(1, "по фамилии"),
+        PHONE(1, "по телефону");
+
+
+        ActionСodes(int codeAction, String text) {
+            this.code = codeAction;
+            this.text = text;
+        }
+
+        public static MenuRemoveContact.ActionСodes byOrdinal(int ord) throws Exception {
+            for (MenuRemoveContact.ActionСodes m : MenuRemoveContact.ActionСodes.values()) {
+                if (m.code == ord) {
+                    return m;
+                }
+            }
+            throw new Exception("Не правильный код выбора");
+        }
+        private final int code;
+        private final String text;
+
+    }
+
+    public MenuRemoveContact.ActionСodes showMainMenu() throws Exception {
+        MenuRemoveContact.ActionСodes selectCodeAction;
+
+        do {
+            System.out.println("Выберите действие:" );
+            for (MenuRemoveContact.ActionСodes m : MenuRemoveContact.ActionСodes.values()) {
+                System.out.println("    " + m.code + " - " + m.text);
+            }
+
+            try {
+                Scanner scanner = new Scanner(System.in);
+                Integer select = scanner.nextInt();
+                selectCodeAction = MenuRemoveContact.ActionСodes.byOrdinal(select);
+                return  selectCodeAction;
+            } catch (Exception e) {
+                System.out.println("Не правильный код выбора");
+                throw new Exception("Не правильный код выбора");
+            }
+        } while (true);
+    }
 }
