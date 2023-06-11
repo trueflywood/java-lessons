@@ -1,13 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
         ArrayList<Integer> arr = new ArrayList<Integer>();
-//        arr.add(0);
-//        arr.add(1);
-//        arr.add(0);
-//        arr.add(3);
-//        arr.add(12);
+
         arr.add(0);
         arr.add(1);
         arr.add(0);
@@ -19,22 +17,12 @@ public class Main {
         arr.add(0);
         arr.add(1);
 
-        Integer nullCount = 0;
-        ArrayList<Integer> arrResult = new ArrayList<Integer>();
+        arr.sort((a, b) -> {
+           if (a == 0 ) return 1;
+           if (b == 0 ) return -1;
+           return 0;
+        });
 
-        for (Integer num:
-             arr) {
-            if(num != 0) {
-                arrResult.add(num);
-            } else {
-                nullCount++;
-            }
-        }
-
-        for (int i=0; i<nullCount; i++) {
-            arrResult.add(0);
-        }
-
-        System.out.println(arrResult.toString());
+        System.out.println(arr);
     }
 }
