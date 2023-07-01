@@ -28,7 +28,7 @@ public class Main {
                     "select *, (price * Pressrun) as sum from `dbo.books` order by sum desc limit 10,5");
             base.execAndShow(
                     "6)Вывести 2 процента старых книг",
-                    "SELECT * FROM( SELECT *, @counter := @counter +1 AS counter FROM (select @counter:=0) AS initvar, `dbo.books` where date not like '' ORDER BY Date asc ) AS X where counter <= (2/100 * @counter)");
+                    "SELECT * FROM ( SELECT *, @counter := @counter +1 AS counter FROM (select @counter:=0) AS initvar, `dbo.books` where  New = 0 ) AS X where counter <= (2/100 * @counter)");
             base.execAndShow(
                     "7)Вывести книги которые были выпущены с 1996 года по 1998",
                     "select * from `dbo.books`  where year(date) >= 1996 and year(date) <= 1998 order by date");
