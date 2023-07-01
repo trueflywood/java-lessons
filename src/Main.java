@@ -37,8 +37,7 @@ public class Main {
                     "select * from `dbo.books`  where month(date) = 5 or month(date) = 7 ");
             base.execAndShow(
                     "9)Вывести топ 5 новых книг которые были выпущены зимой в отсортированном виде по цене (убывание)",
-                    "select * from (select * from `dbo.books` where  month(date) = 12 or month(date) = 1 or month(date) = 2 order by Date desc limit 5) as x order by Price desc");
-
+                    "select * from `dbo.books` where  (month(date) = 12 or month(date) = 1 or month(date) = 2) and new = 1 order by Price desc limit 5");
 
             base.close();
         } catch (ClassNotFoundException | SQLException e) {
@@ -46,10 +45,7 @@ public class Main {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
     }
-
-
 }
 
 
