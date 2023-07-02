@@ -26,8 +26,9 @@ public class Main {
             resultList = new ArrayList<>(tmpList);
         }
 
-
+        System.out.println("наибольшая возрастающая подпоследовательность:");
         System.out.println(resultList);
+        System.out.println("длинна: " + resultList.size());
     }
 
 //    public getSequence ()
