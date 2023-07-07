@@ -65,8 +65,19 @@ public class Contact {
 
     @Override
     public String toString() {
-        return "| "+ this.id + "| "+ this.name + " | " +this.surname + " | " +this.number + " | " +this.age + " |";
+
+        return "| "+ padRight(this.id.toString(), MaxLengthFields.maxID) + " | "+ padRight(this.name, MaxLengthFields.maxName) + " | " + padRight(this.surname, MaxLengthFields.maxSurname) + " | " + padRight(this.number, MaxLengthFields.maxNumber) + " | " + padRight(Integer.toString(this.age, 10), MaxLengthFields.maxAge) + " |";
     }
 
+    static String padRight(String s, int n) {
+        String x = "";
+        if (n - s.length() > 0) {
+            x = String.format("%-" + n + "s", s);
+        } else {
+            x = s;
+        }
+
+        return x;
+    }
 
 }

@@ -165,33 +165,35 @@ public class PhoneBook {
 
     private void SortPhone() {
         List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getNumber().compareToIgnoreCase(contact2.getNumber())).toList();
-        this.PrintHeader("Контакты (сортировка по номеру)");
+       
+        int length =  this.PrintHeader("Контакты (сортировка по номеру)");
+
         for (Contact contact:
                 sortedBook) {
             System.out.println(contact);
         }
-        this.PrintFooter();
+        this.PrintFooter(length);
     }
 
     private void SortName() {
         List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getName().compareToIgnoreCase(contact2.getName())).toList();
-        this.PrintHeader("Контакты (сортировка по Имени)");
+        int length = this.PrintHeader("Контакты (сортировка по Имени)");
         for (Contact contact:
                 sortedBook) {
             System.out.println(contact);
         }
-        this.PrintFooter();
+        this.PrintFooter(length);
 
     }
 
     private void SortSurname() {
         List<Contact> sortedBook = this.book.stream().sorted((contact1, contact2) -> contact1.getSurname().compareToIgnoreCase(contact2.getSurname())).toList();
-        this.PrintHeader("Контакты (сортировка по Фамилии)");
+        int length = this.PrintHeader("Контакты (сортировка по Фамилии)");
         for (Contact contact:
                 sortedBook) {
             System.out.println(contact);
         }
-        this.PrintFooter();
+        this.PrintFooter(length);
 
     }
 
@@ -200,12 +202,12 @@ public class PhoneBook {
 
 
         List<Contact> sortedBook = this.book.stream().sorted(Comparator.comparing(Contact::getId)).toList();
-        this.PrintHeader("Контакты (сортировка по ID)");
+        int length = this.PrintHeader("Контакты (сортировка по ID)");
         for (Contact contact:
                 sortedBook) {
             System.out.println(contact);
         }
-        this.PrintFooter();
+        this.PrintFooter(length);
 
     }
 
@@ -236,12 +238,12 @@ public class PhoneBook {
 
             List<Contact> filtered = this.book.stream().filter(item -> item.getName().toLowerCase().contains(searchStr.toLowerCase()) || item.getSurname().toLowerCase().contains(searchStr.toLowerCase()) || item.getNumber().toLowerCase().contains(searchStr.toLowerCase())).toList();
 
-            this.PrintHeader("Контакты");
+            int length = this.PrintHeader("Контакты");
             for (Contact contact:
                     filtered) {
                 System.out.println(contact);
             }
-            this.PrintFooter();
+            this.PrintFooter(length);
             break;
 
         } while (true);
@@ -255,6 +257,9 @@ public class PhoneBook {
 
         do {
             Scanner scanner = new Scanner(System.in);
+            Scanner scanner2 = new Scanner(System.in);
+            Scanner scanner3 = new Scanner(System.in);
+            Scanner scanner4 = new Scanner(System.in);
             try {
                 System.out.print("Выберите id записи:  " );
                 Integer id = scanner.nextInt();
@@ -264,25 +269,27 @@ public class PhoneBook {
 
 
 
-
                 System.out.print("\nВведите новое имя(" + oldContact.getName() + "): ");
-                String name = scanner.next();
+                String name = scanner4.nextLine();
                 if(name.equals("")) name = oldContact.getName();
-
                 System.out.print("\nВведите новую фамилию(" + oldContact.getSurname() + "): ");
-                String surname = scanner.next();
+                String surname = scanner3.nextLine();
                 if(surname.equals("")) surname = oldContact.getSurname();
 
                 System.out.print("\nВведите номер(" + oldContact.getNumber() + "): ");
-                String number = scanner.next();
+                String number = scanner.nextLine();
                 if(number.equals("")) number = oldContact.getNumber();
 
                 Integer age;
                 do {
-                    Scanner scanner2 = new Scanner(System.in);
                     try {
                         System.out.print("\nВведите возраст(" + oldContact.getAge() + "):");
-                         age = scanner2.nextInt();
+                        String newStringAge = scanner2.nextLine();
+                        if (newStringAge.equals("")) {
+                            age = oldContact.getAge();
+                        } else {
+                            age =  Integer.parseInt(scanner2.nextLine());
+                        }
                         if (age < 1 || age > 120) {
                             throw new Exception("Не правильный возраст");
                         }
@@ -502,12 +509,15 @@ public class PhoneBook {
      * отображение всего списка контактов
      */
     private void ShowAllContacts() {
-        this.PrintHeader("Контакты");
+        int length = this.PrintHeader("Контакты");
+
+        
         for (Contact contact:
                 book) {
             System.out.println(contact);
+
         }
-        this.PrintFooter();
+        this.PrintFooter(length);
     }
 
     /**
@@ -520,9 +530,9 @@ public class PhoneBook {
                 System.out.print("Выберите id записи:  " );
                 Integer id = scanner.nextInt();
                 int index = this.idToIndex(id);
-                this.PrintHeader("Запись " + index);
+                int length = this.PrintHeader("Запись " + index);
                 System.out.println( book.toArray()[index]);
-                this.PrintFooter();
+                this.PrintFooter(length);
                 break;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -535,20 +545,37 @@ public class PhoneBook {
      *
      * @param title заголовок
      */
-    private void PrintHeader(String title) {
+    private int PrintHeader(String title) {
         System.out.println();
         System.out.println();
         System.out.println(title);
-        System.out.println("=========================================");
-        System.out.println("| ID | Имя | фамилия | Телефон | Возраст |");
-        System.out.println("=========================================");
+        MaxLengthFields.reset();
+        getMaxLength();
+        String head = "| "+ Contact.padRight("ID", MaxLengthFields.maxID)+" | "+ Contact.padRight("Имя", MaxLengthFields.maxName)+" | "+ Contact.padRight("Фамилия", MaxLengthFields.maxSurname)+" | "+ Contact.padRight("Телефон", MaxLengthFields.maxNumber)+" | "+ Contact.padRight("Возраст", MaxLengthFields.maxAge)+" |";
+        System.out.println("=".repeat(head.length()));
+        System.out.println(head);
+        System.out.println("=".repeat(head.length()));
+        return head.length();
+    }
+
+    private void getMaxLength() {
+
+        for (Contact contact:
+                book) {
+
+            MaxLengthFields.maxID = Math.max(MaxLengthFields.maxID, contact.getId().toString().length());
+            MaxLengthFields.maxName = Math.max(MaxLengthFields.maxName, contact.getName().length());
+            MaxLengthFields.maxSurname = Math.max(MaxLengthFields.maxName, contact.getName().length());
+            MaxLengthFields.maxNumber = Math.max(MaxLengthFields.maxNumber, contact.getNumber().length());
+            MaxLengthFields.maxAge = Math.max(MaxLengthFields.maxAge, Integer.toString(contact.getAge()).length() );
+        }
     }
 
     /**
      * Печать низа списка
      */
-    private void PrintFooter() {
-        System.out.println("=========================================");
+    private void PrintFooter(int length) {
+        System.out.println("=".repeat(length));
         System.out.println();
         System.out.println();
     }
@@ -643,4 +670,7 @@ class MenuRemoveContact  {
             }
         } while (true);
     }
+
+    
 }
+
