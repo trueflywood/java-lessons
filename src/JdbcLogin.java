@@ -28,7 +28,11 @@ public class JdbcLogin {
         this.connection.close();
     }
 
-    public void execAndShow(String title, String sql) throws SQLException {
+    public void execAndShow(String title, String sql) throws Exception {
+        if(title.equals("") || sql.equals("")) {
+//            throw new Exception("Условие и реализация не могут быть пустыми");
+            return;
+        }
         System.out.println();
         System.out.println("Задание: "+ title);
         System.out.println("Запрос: "+ sql);

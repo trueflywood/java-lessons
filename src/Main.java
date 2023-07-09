@@ -9,39 +9,60 @@ public class Main {
         try {
             base.StartBdd();
             base.execAndShow(
-                    "1)Вывести топ 5 книг с наибольшем тиражом",
-                    "SELECT * FROM `dbo.books` order by Pressrun desc limit 5; "
+                    "1)отобразить список авторов книг без повторений. Отсортировать по возрастанию",
+                    "" // В базе нет информации об авторах книг
             );
             base.execAndShow(
-                    "2)Вывести книги где цена больше 10 и меньше 50",
-                    "select * from `dbo.books` where (price >10 and price < 50)"
+                    "2) Отобразить книги по программированию издательств \"Питер\" и \"BHV\"",
+                    "SELECT *  FROM `dbo.books` where Themes = \"Программирование\" and ( Izd like \"BHV%\" or Izd like \"%Питер%\");"
             );
             base.execAndShow(
-                    "3) Вывести книги где N коде меньше цены",
-                    "select * from `dbo.books` where price > N"
+                    "3) Отобразить все книги у которых количество страниц лежит в пределах от 200 до 600",
+                    "SELECT *  FROM `dbo.books` where Pages between 200 and 600;"
             );
             base.execAndShow(
-                    "4) Вывести книги где N коде больше тиража",
-                    "select * from `dbo.books` where N > Pressrun");
+                    "4) Отобразить все книги Имена авторов котрых лежат в диапазоне от букв \"В\" до \"О\". Отсортиролвать по возрастанию по авторам",
+                    ""// В базе нет информации об авторах книг
+            );
             base.execAndShow(
-                    "5) Вывести книги которые занимают в списке 10-15 место по общей сумме (тираж * цена) ",
-                    "select *, (price * Pressrun) as sum from `dbo.books` order by sum desc limit 10,5");
+                    "5) выбрать книги, относящиеся к программированию иди базам данных, и издательства которых не \"Питер\" и не \"Бином\" ",
+                    "SELECT *  FROM `dbo.books` where ( Izd not like \"Бином\" and Izd not like \"Питер\") and (lower(Themes) like \"%программирование%\" or lower(Themes) like \"%базы данных%\");"
+            );
             base.execAndShow(
-                    "6)Вывести 2 процента старых книг",
-                    "SELECT * FROM ( SELECT *, @counter := @counter +1 AS counter FROM (select @counter:=0) AS initvar, `dbo.books` where  New = 0 ) AS X where counter <= (2/100 * @counter)");
+                    "6) Выбрать из таблицы тех авторов (без повторений), у которых в имени и фамилии не мение двух букв \"А\"",
+                    "" // В базе нет информации об авторах книг
+            );
             base.execAndShow(
-                    "7)Вывести книги которые были выпущены с 1996 года по 1998",
-                    "select * from `dbo.books`  where year(date) >= 1996 and year(date) <= 1998 order by date");
+                    "7) Отобразить всех авторов и их книги. Авторов отсортировать по овозрастанию, а название книг (по авторам) по убыванию (вторичная сортировка)",
+                    "" // В базе нет информации об авторах книг
+            );
             base.execAndShow(
-                    "8)Вывести книги которые были выпущены в мае или в июле",
-                    "select * from `dbo.books`  where month(date) = 5 or month(date) = 7 ");
+                    "8) выбрать из таблицы книги, название которых начинаются с цифры ",
+                    "SELECT *  FROM `dbo.books` where Name regexp \"^[0-9].*\";"
+            );
             base.execAndShow(
-                    "9)Вывести топ 5 новых книг которые были выпущены зимой в отсортированном виде по цене (убывание)",
-                    "select * from `dbo.books` where  (month(date) = 12 or month(date) = 1 or month(date) = 2) and new = 1 order by Price desc limit 5");
+                     "9)выбрать из таблицы книги, название которых заканчиваются на 4 цифры",
+                    "SELECT *  FROM `dbo.books` where Name regexp \".*[0-9]{4}$\";"
+            );
+            base.execAndShow(
+                    "10) выбрать из таблицы книги, в названиях которых ровно 2 цифры",
+                    "SELECT *  FROM `dbo.books` where Name regexp \"^[^0-9]*[0-9][^0-9]*[0-9][^0-9]*$\";"
+            );
+
+            base.execAndShow(
+                    "11) выбрать из таблицы книги, Которые имеются в единственном экземпляре",
+                    "" // В базе нет информации о количестве книг
+            );
+            base.execAndShow(
+                    "12) выбрать из таблицы книги по программированию, не относящиеся к издательству \"BHV\", а в названиях которых есть слово \"Visual\"",
+                    "SELECT *  FROM `dbo.books` where  Izd not like \"%BHV%\" and lower(Themes) like \"%программирование%\" and Name like \"%Visual%\";"
+            );
+
+
 
             base.close();
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("ошибка подключения");
+        } catch (Exception e) {
+            System.out.println("Ошибка:");
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
