@@ -56,6 +56,8 @@ public class PhoneBook {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Contact>>(){}.getType();
         this.book = gson.fromJson(jsonData, listType);
+
+        getMaxLength();
         showMainMenu();
     }
 
@@ -71,9 +73,9 @@ public class PhoneBook {
             System.out.println("""
                         0 - Выход
                         1 - Добавить запись
-                        2 - Показать запись по id
+                        2 - Показать запись...
                         3 - Показать все записи
-                        4 - Удалить запись по id
+                        4 - Удалить запись...
                         5 - Удалить все записи
                         6 - Изменить запись
                         7 - Найти записи
@@ -338,7 +340,20 @@ public class PhoneBook {
         if (!success) throw new Exception("не правильный ID записи");
         return index;
     }
-     private int nameToIndex(String name) throws Exception {
+
+
+    private ArrayList<Integer> nameToIndexArr(String name) throws Exception {
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getName().equalsIgnoreCase(name) ) {
+                arr.add(i);
+            }
+        }
+        if (arr.size() == 0) throw new Exception("записи с таким именем не найдены");
+        return arr;
+    }
+
+    private int nameToIndex(String name) throws Exception {
         Boolean success = false;
         int index = 0;
         for (int i = 0; i < book.toArray().length; i++) {
@@ -349,6 +364,18 @@ public class PhoneBook {
         }
         if (!success) throw new Exception("запись с таким именем не найдена");
         return index;
+    }
+
+
+    private ArrayList<Integer> surnameToIndexArr(String surname) throws Exception {
+       ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getSurname().equalsIgnoreCase(surname) ) {
+                arr.add(i);
+            }
+        }
+        if (arr.size() == 0) throw new Exception("записи с такой фамилией не найдена");
+        return arr;
     }
     private int surnameToIndex(String surname) throws Exception {
         Boolean success = false;
@@ -362,6 +389,18 @@ public class PhoneBook {
         if (!success) throw new Exception("запись с такой фамилией не найдена");
         return index;
     }
+
+    private ArrayList<Integer> phoneToIndexArr(String phone) throws Exception {
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i < book.toArray().length; i++) {
+            if (book.get(i).getNumber().equalsIgnoreCase(phone) ) {
+                arr.add(i);
+            }
+        }
+        if (arr.size() == 0) throw new Exception("записи с таким номером не найдены");
+        return arr;
+    }
+
     private int phoneToIndex(String phone) throws Exception {
         Boolean success = false;
         int index = 0;
@@ -383,13 +422,14 @@ public class PhoneBook {
     private void RemoveContact() {
         MenuRemoveContact menu = new MenuRemoveContact();
         try {
-            MenuRemoveContact.ActionСodes code = menu.showMainMenu();
+            MenuRemoveContact.ActionCodes code = menu.showMainMenu();
             switch (code) {
                 case ID -> removeContactById();
                 case NAME -> removeContactByName();
                 case SURNAME -> removeContactBySurname();
                 case PHONE -> removeContactByPhone();
             }
+            getMaxLength();
         } catch (Exception e) {
             System.out.println("Не правильный код выбора");
         }
@@ -524,6 +564,87 @@ public class PhoneBook {
      * отображение 1 контакта по ID
      */
     private void ShowContact() {
+        MenuRemoveContact menu = new MenuRemoveContact();
+        try {
+            MenuRemoveContact.ActionCodes code = menu.showMainMenu();
+            switch (code) {
+                case ID -> showContactById();
+                case NAME -> showContactByName();
+                case SURNAME -> showContactBySurname();
+                case PHONE -> showContactByPhone();
+            }
+            getMaxLength();
+        } catch (Exception e) {
+            System.out.println("Не правильный код выбора");
+        }
+    }
+
+    private void showContactByPhone() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Укажите Телефон:  " );
+                String surname = scanner.nextLine();
+                ArrayList<Integer> surnameIndex = this.phoneToIndexArr(surname);
+                int length = this.PrintHeader("Контакты ");
+                for (Integer userIndex:
+                        surnameIndex) {
+                    System.out.println( book.toArray()[userIndex]);
+                }
+                this.PrintFooter(length);
+
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+    }
+
+    private void showContactBySurname() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Укажите Фамилию:  " );
+                String surname = scanner.nextLine();
+                ArrayList<Integer> surnameIndex = this.surnameToIndexArr(surname);
+                int length = this.PrintHeader("Контакты ");
+                for (Integer userIndex:
+                     surnameIndex) {
+                    System.out.println( book.toArray()[userIndex]);
+
+                }
+                this.PrintFooter(length);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+
+    }
+
+    private void showContactByName() {
+        do {
+            Scanner scanner = new Scanner(System.in);
+            try {
+                System.out.print("Укажите имя:  " );
+                String name = scanner.nextLine();
+                ArrayList<Integer> nameIndexArr = this.nameToIndexArr(name);
+                int length = this.PrintHeader("Контакты ");
+                for (Integer nameIndex:
+                        nameIndexArr) {
+                    System.out.println( book.toArray()[nameIndex]);
+
+                }
+                this.PrintFooter(length);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (true);
+    }
+
+    private void showContactById() {
         do {
             Scanner scanner = new Scanner(System.in);
             try {
@@ -549,8 +670,7 @@ public class PhoneBook {
         System.out.println();
         System.out.println();
         System.out.println(title);
-        MaxLengthFields.reset();
-        getMaxLength();
+
         String head = "| "+ Contact.padRight("ID", MaxLengthFields.maxID)+" | "+ Contact.padRight("Имя", MaxLengthFields.maxName)+" | "+ Contact.padRight("Фамилия", MaxLengthFields.maxSurname)+" | "+ Contact.padRight("Телефон", MaxLengthFields.maxNumber)+" | "+ Contact.padRight("Возраст", MaxLengthFields.maxAge)+" |";
         System.out.println("=".repeat(head.length()));
         System.out.println(head);
@@ -559,7 +679,7 @@ public class PhoneBook {
     }
 
     private void getMaxLength() {
-
+        MaxLengthFields.reset();
         for (Contact contact:
                 book) {
 
@@ -616,6 +736,7 @@ public class PhoneBook {
         } while (true);
 
         this.book.add(contact);
+        getMaxLength();
         this.ShowAllContacts();
 
     }
@@ -625,20 +746,20 @@ public class PhoneBook {
 
 class MenuRemoveContact  {
 
-    enum ActionСodes {
+    enum ActionCodes {
         ID(0, "по id" ),
         NAME(1, "по имени"),
         SURNAME(1, "по фамилии"),
         PHONE(1, "по телефону");
 
 
-        ActionСodes(int codeAction, String text) {
+        ActionCodes(int codeAction, String text) {
             this.code = codeAction;
             this.text = text;
         }
 
-        public static MenuRemoveContact.ActionСodes byOrdinal(int ord) throws Exception {
-            for (MenuRemoveContact.ActionСodes m : MenuRemoveContact.ActionСodes.values()) {
+        public static ActionCodes byOrdinal(int ord) throws Exception {
+            for (ActionCodes m : ActionCodes.values()) {
                 if (m.code == ord) {
                     return m;
                 }
@@ -650,19 +771,19 @@ class MenuRemoveContact  {
 
     }
 
-    public MenuRemoveContact.ActionСodes showMainMenu() throws Exception {
-        MenuRemoveContact.ActionСodes selectCodeAction;
+    public ActionCodes showMainMenu() throws Exception {
+        ActionCodes selectCodeAction;
 
         do {
             System.out.println("Выберите действие:" );
-            for (MenuRemoveContact.ActionСodes m : MenuRemoveContact.ActionСodes.values()) {
+            for (ActionCodes m : ActionCodes.values()) {
                 System.out.println("    " + m.code + " - " + m.text);
             }
 
             try {
                 Scanner scanner = new Scanner(System.in);
                 Integer select = scanner.nextInt();
-                selectCodeAction = MenuRemoveContact.ActionСodes.byOrdinal(select);
+                selectCodeAction = ActionCodes.byOrdinal(select);
                 return  selectCodeAction;
             } catch (Exception e) {
                 System.out.println("Не правильный код выбора");
